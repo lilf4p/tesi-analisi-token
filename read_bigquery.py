@@ -33,5 +33,6 @@ writer.writeheader()
 
 #scrivo ogni record in una riga
 for result in results:
+    #func_obj,func_params = decode.start(result[0],result[3])
     writer.writerow(result)
     
