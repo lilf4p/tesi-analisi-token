@@ -10,8 +10,8 @@ project_id = 'ethereum-blockchain-326613'
 client = bigquery.Client(credentials= credentials,project=project_id)
 
 query_job = client.query("""
-   SELECT address, from_address, to_address, input, block_timestamp 
-   FROM token_erc20.trx_10token
+   SELECT address, tabella_trx.hash, from_address, to_address, input, block_timestamp 
+   FROM token_erc20.trx_10token as tabella_trx
    LIMIT 100 """)
 
 results = query_job.result() #aspetta che venga completata la query
@@ -24,7 +24,7 @@ results = query_job.result() #aspetta che venga completata la query
 #print(list_res)
 
 #header csv
-fieldnames = ['address', 'from_address', 'to_address', 'input', 'block_timestamp']
+fieldnames = ['address', 'hash', 'from_address', 'to_address', 'input', 'block_timestamp']
 
 #apro csv in scrittura
 f = open('trx_token.csv','w', encoding='UTF8', newline='')
