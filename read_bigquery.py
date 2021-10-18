@@ -28,7 +28,8 @@ for address in list_address:
    query_job = client.query("""
       SELECT address, tabella_trx.hash, from_address, to_address, input, block_timestamp 
       FROM token_erc20.trx_10token as tabella_trx
-      WHERE address = '""" + address + """'""")
+      WHERE address = '""" + address + """'
+      LIMIT 10""")
 
    results = query_job.result() #aspetta che venga completata la query
    print('Query completata')
