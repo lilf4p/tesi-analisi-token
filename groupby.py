@@ -1,4 +1,5 @@
 import csv
+import os
 
 #INDICI CONTRATTI (DA AGGIORNARE QUANDO SI CAMBIA MAP!!!!!)
 c1 = "1"
@@ -86,7 +87,8 @@ fi.close()
 fieldnames = ['val_min','val_max','val_avg','val_sum','time_first','time_last','counter_trx','type_trx']
 n=1
 for dc in ldict:
-    fname = "trx_contract_"+str(n)+".csv"
+    fname = "./trx_contract/trx_contract_"+str(n)+".csv"
+    os.makedirs(os.path.dirname(fname), exist_ok=True)
     fo = open(fname,'w', encoding='UTF8', newline='')
     csv_writer = csv.writer(fo)
     csv_writer.writerow(fieldnames)
