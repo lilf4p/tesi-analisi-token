@@ -29,7 +29,7 @@ print ("Scaricate abi dei contratti")
 fi = open('trx_token_v2.csv','r')
 csv_reader = csv.reader(fi, delimiter=',')
 
-fieldnames = ['address', 'hash', 'from_address', 'to_address', 'input', 'block_timestamp']
+fieldnames = ['address', 'hash', 'from_address', 'to_address', 'input', 'block_timestamp', 'value', 'type']
 # file editato
 fo = open('trx_token_ottimizzatoV1.csv','w', encoding='UTF8', newline='')
 csv_writer = csv.writer(fo)
@@ -42,32 +42,43 @@ for row in csv_reader:
     # skippa header csv
     if (row[0] != "address"): 
         # decode(input) -> scrivi sul file nuovo solo se e' TRANSFER/TRANSFER_TO
-        func_obj, func_params = map_contract[row[0]].decode_function_input(row[4])
-        if (str(func_obj) == "<Function transfer(address,uint256)>"):
-            #print(func_obj)
-            #print(func_params)
-            #print("ITER")
-            # mappa row[0]
-            if row[0] not in map_add.keys():
-                map_add[row[0]] = index
-                row[0]=index
-                index = index+1
-            else: row[0] = map_add[row[0]]
-            # mappa row[2]
-            if row[2] not in map_add.keys():
-                map_add[row[2]] = index
-                row[2]=index
-                index = index+1
-            else: row[2] = map_add[row[2]]
-            # row[3] = decode(input)[to] -> mappa row[3]
-            row[3] = first_value = list(func_params.values())[0]
-            if row[3] not in map_add.keys():
-                map_add[row[3]] = index
-                row[3]=index
-                index = index+1
-            else: row[3] = map_add[row[3]]
-            #scrivi nuova riga sul file nuovo
-            csv_writer.writerow(row)      
+        if (row[4] != "0x"):
+            func_obj, func_params = map_contract[row[0]].decode_function_input(row[4])
+            if (str(func_obj) == "<Function transfer(address,uint256)>" or ("transferFrom" in str(func_obj))):
+                #print(func_obj)
+                #print(func_params)
+                #print("ITER")
+                # mappa row[0]
+                if row[0] not in map_add.keys():
+                    map_add[row[0]] = index
+                    row[0]=index
+                    index = index+1
+                else: row[0] = map_add[row[0]]
+                # mappa row[2]
+                if row[2] not in map_add.keys():
+                    map_add[row[2]] = index
+                    row[2]=index
+                    index = index+1
+                else: row[2] = map_add[row[2]]
+
+                # row[3] = decode(input)[to] -- nella quarta colonna (address_to) inserisco il valore _to ottenuto decodificando input 
+                if (str(func_obj) == "<Function transfer(address,uint256)>"): 
+                    row[3] = list(func_params.values())[0] # se funzione transfer devo prendere il primo parametro
+                    value = list(func_params.values())[1]
+                elif "transferFrom" in str(func_obj):
+                    row[3] = list(func_params.values())[1] # se funzione transferFrom prendo il secondo
+                    value = list(func_params.values())[2]
+                # map row[3]
+                if row[3] not in map_add.keys():
+                    map_add[row[3]] = index
+                    row[3]=index
+                    index = index+1
+                else: row[3] = map_add[row[3]]
+                #scrivi nuova riga sul file nuovo
+                row.append(value)
+                row.append(func_obj)
+                csv_writer.writerow(row)
+               
     else: csv_writer.writerow(fieldnames)
 
 fi.close()
@@ -77,6 +88,7 @@ fo.close()
 #print(map_add)
 fmap = open('map_add-int.csv','w', encoding='UTF8', newline='')
 csv_writer2 = csv.writer(fmap)
+csv_writer2.writerow(['address','index'])
 for key, value in map_add.items():
     csv_writer2.writerow([key,value])
 
