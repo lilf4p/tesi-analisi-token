@@ -1,17 +1,17 @@
 import csv
 import os
 
-#INDICI CONTRATTI (DA AGGIORNARE QUANDO SI CAMBIA MAP!!!!!)
+#INDICI CONTRATTI 
 c1 = "1"
-c2 = "167"
-c3 = "363"
-c4 = "528"
-c5 = "548"
-c6 = "703"
-c7 = "854"
-c8 = "987"
-c9 = "1139"
-c10 = "1284"
+c2 = "2"
+c3 = "3"
+c4 = "4"
+c5 = "5"
+c6 = "6"
+c7 = "7"
+c8 = "8"
+c9 = "9"
+c10 = "10"
 
 fi = open('trx_token_ottimizzatoV1.csv','r')
 csv_reader = csv.reader(fi,delimiter=',')
@@ -67,16 +67,32 @@ for row in csv_reader:
         #upgrade values in map for the trx
         #lista di [vmin,vmax,vmedia,vsomma,mintime,maxtime,count_trx,type]
         list_arg = d[key]
-        #print(list_arg)
-        if value < list_arg[0]: list_arg[0]=value #vmin
-        if value > list_arg[1]: list_arg[1]=value #vmax
+        vmin = float(list_arg[0])
+        vmax = float(list_arg[1])
+        vmedia = float(list_arg[2])
+        vsomma = float(list_arg[3])
+        mintime = list_arg[4]
+        maxtime = list_arg[5]
+        count = int(list_arg[6])
+    
+        #UPGRADE 
+        if float(value) < vmin: list_arg[0]=value #vmin
+        if float(value) > vmax: list_arg[1]=value #vmax
+
         #newAve = ((oldAve*oldNumPoints) + x)/(oldNumPoints+1)
-        avg = ((int(list_arg[2])*int(list_arg[6])) + int(value))/(int(list_arg[6])+1) #vmedia
+        avg = ((vmedia*count) + float(value))/(count+1) #vmedia
         list_arg[2] = str(avg)
-        list_arg[3] = list_arg[3]+value #vsomma
+
+        #vsomma
+        vsomma = vsomma+float(value) 
+        list_arg[3] = str(vsomma)
+
         if time < list_arg[4]: list_arg[4] = time #mintime
         if time > list_arg[5]: list_arg[5] = time #maxtime
-        list_arg[6] = list_arg[6] + 1 #count
+
+        count = count + 1 #count
+        list_arg[6] = str(count)
+
         list_arg[7] = type_trx #type
 
         d[key] = list_arg
@@ -98,3 +114,8 @@ for dc in ldict:
     fo.close()
     n=n+1
 
+
+#ESEMPIO DI AGGREGAZIONE
+#293,294,247000000,621000000,412833333.3333333,357000000621000000481000000247000000414000000357000000,2020-07-05 10:36:16+00:00,2020-10-29 09:17:04+00:00,6,"<Function transferFrom(address,address,uint256)>"
+
+#293,294,247000000,621000000,412833333.3333333,2477000000.0,2020-07-05 10:36:16+00:00,2020-10-29 09:17:04+00:00,6,"<Function transferFrom(address,address,uint256)>"
