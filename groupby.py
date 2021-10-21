@@ -61,7 +61,11 @@ for row in csv_reader:
     #SE COPPIA (ADD_TO,ADD_FROM) IS NOT IN KEYS AGGIUNGI
     #ALTRIMENTI AGGIORNA I VALORI
     if key not in d.keys(): #trx non presente 
-        list_arg = [value,value,value,value,time,time,1,type_trx] #lista di [vmin,vmax,vmedia,vsomma,mintime,maxtime,count_trx,type]
+        if type_trx == "<Function transfer(address,uint256)>":
+            c = "1" #type
+        elif "transferFrom" in type_trx:
+            c = "2"
+        list_arg = [value,value,value,value,time,time,1,c] #lista di [vmin,vmax,vmedia,vsomma,mintime,maxtime,count_trx,type]
         d[key] = list_arg
     else: #trx gia' presente 
         #upgrade values in map for the trx
@@ -93,14 +97,17 @@ for row in csv_reader:
         count = count + 1 #count
         list_arg[6] = str(count)
 
-        list_arg[7] = type_trx #type
+        if type_trx == "<Function transfer(address,uint256)>":
+            list_arg[7] = "1" #type
+        elif "transferFrom" in type_trx:
+            list_arg[7] = "2"
 
         d[key] = list_arg
 
 fi.close()
 
 #SCRIVI OGNI DICT SU UN CSV
-fieldnames = ['val_min','val_max','val_avg','val_sum','time_first','time_last','counter_trx','type_trx']
+fieldnames = ['from_address','to_address','val_min','val_max','val_avg','val_sum','time_first','time_last','counter_trx','type_trx']
 n=1
 for dc in ldict:
     fname = "./trx_contract/trx_contract_"+str(n)+".csv"
