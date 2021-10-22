@@ -3,6 +3,7 @@ import config
 from web3 import Web3
 import json
 import requests
+import time
 
 # --------- CREO I 10 C0NTRATTI PER DECODIFICARE -------- #
 api_key = config.apy_key
@@ -41,6 +42,7 @@ for ad in list_contract:
     map_add[ad] = index
     index = index+1
 
+#start_time = time.time()
 for row in csv_reader:
     #print(row)
     # skippa header csv
@@ -56,13 +58,13 @@ for row in csv_reader:
             #print(func_params)
             #print("ITER")
             # mappa row[0]
-            if row[0] not in map_add.keys():
+            if row[0] not in map_add:
                 map_add[row[0]] = index
                 row[0]=index
                 index = index+1
             else: row[0] = map_add[row[0]]
             # mappa row[2]
-            if row[2] not in map_add.keys():
+            if row[2] not in map_add:
                 map_add[row[2]] = index
                 row[2]=index
                 index = index+1
@@ -75,7 +77,7 @@ for row in csv_reader:
                 row[3] = list(func_params.values())[1] # se funzione transferFrom prendo il secondo
                 value = list(func_params.values())[2]
             # map row[3]
-            if row[3] not in map_add.keys():
+            if row[3] not in map_add:
                 map_add[row[3]] = index
                 row[3]=index
                 index = index+1
@@ -89,6 +91,7 @@ for row in csv_reader:
 
 fi.close()
 fo.close()
+#print("--- %s seconds ---" % (time.time() - start_time))
 
 # scrivi map su file 
 #print(map_add)
