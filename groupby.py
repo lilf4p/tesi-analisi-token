@@ -60,7 +60,7 @@ for row in csv_reader:
 
     #SE COPPIA (ADD_TO,ADD_FROM) IS NOT IN KEYS AGGIUNGI
     #ALTRIMENTI AGGIORNA I VALORI
-    if key not in d.keys(): #trx non presente 
+    if key not in d: #trx non presente 
         if type_trx == "<Function transfer(address,uint256)>":
             c = "1" #type
         elif "transferFrom" in type_trx:
