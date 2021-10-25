@@ -1,5 +1,8 @@
 import csv
 import os
+import time as tm
+
+start_time = tm.time()
 
 #INDICI CONTRATTI 
 c1 = "1"
@@ -121,6 +124,7 @@ for dc in ldict:
     fo.close()
     n=n+1
 
+print("--- %s seconds ---" % (tm.time() - start_time))
 
 #ESEMPIO DI AGGREGAZIONE
 #293,294,247000000,621000000,412833333.3333333,357000000621000000481000000247000000414000000357000000,2020-07-05 10:36:16+00:00,2020-10-29 09:17:04+00:00,6,"<Function transferFrom(address,address,uint256)>"
