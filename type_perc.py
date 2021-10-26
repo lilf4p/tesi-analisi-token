@@ -27,14 +27,14 @@ for add in list_contract:
 print ("Scaricate abi dei contratti")
 
 # file vecchio
-fi = open('trx_token_v2.csv','r')
+fi = open('trx_token_piccolo.csv','r')
 csv_reader = csv.reader(fi, delimiter=',')
 
 #lista di dict di type-counter
 l=dict()
 for ad in list_contract:
-    l[ad] = dict()
-print(l)
+    l[ad] = dict(tot=0)
+#print(l)
 start_time = time.time()
 for row in csv_reader:
     #print(row)
@@ -48,16 +48,25 @@ for row in csv_reader:
 
         d = l[row[0]]
 
-        if func_obj in d:
-            n = d[func_obj]
+        d['tot'] = d['tot'] + 1
+
+        if str(func_obj) in d:
+            n = d[str(func_obj)]
             n = n+1
-            d[func_obj] = n
+            d[str(func_obj)] = n
         else:
-            d[func_obj] = 1
+            d[str(func_obj)] = 1
             
-        print(l)
+        #print(l)
              
 fi.close()
+
+
+fo = open ('stats_type_trx.json','w')
+json.dump(l,fo,indent=4)
+
 print("--- %s seconds ---" % (time.time() - start_time))
+
+
 
 #print(l)

@@ -18,7 +18,7 @@ list_address = ["0xdac17f958d2ee523a2206206994597c13d831ec7","0x174bfa6600bf90c8
 fieldnames = ['address', 'hash', 'from_address', 'to_address', 'input', 'block_timestamp']
 
 #scrivo header csv e lo apro in append
-f = open('trx_token_v2.csv','a', encoding='UTF8', newline='')
+f = open('trx_token_piccolo.csv','a', encoding='UTF8', newline='')
 writer = csv.DictWriter(f, fieldnames=fieldnames)
 writer.writeheader()
 
@@ -29,7 +29,7 @@ for address in list_address:
       SELECT address, tabella_trx.hash, from_address, to_address, input, block_timestamp 
       FROM token_erc20.trx_10token as tabella_trx
       WHERE address = '""" + address + """'
-      LIMIT 10000""")
+      LIMIT 10""")
 
    results = query_job.result() #aspetta che venga completata la query
    print('Query completata')

@@ -1,0 +1,46 @@
+{
+    "0xdac17f958d2ee523a2206206994597c13d831ec7": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0x174bfa6600bf90c885c7c01c7031389ed1461ab9": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0x514910771af9ca656af840dff83e8264ecf986ca": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
+        "tot": 10,
+        "<Function deposit()>": 5,
+        "<Function approve(address,uint256)>": 2,
+        "<Function transfer(address,uint256)>": 1,
+        "<Function withdraw(uint256)>": 2
+    },
+    "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0x0d8775f648430679a709e98d2b0cb6250d2887ef": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0xd26114cd6ee289accf82350c8d8487fedb8a0c07": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0x8fdcc30eda7e94f1c12ce0280df6cd531e8365c5": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0xf230b790e05390fc8295f4d3f60332c93bed42e2": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 10
+    },
+    "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce": {
+        "tot": 10,
+        "<Function transfer(address,uint256)>": 9,
+        "<Function approve(address,uint256)>": 1
+    }
+}
