@@ -27,7 +27,7 @@ for add in list_contract:
 print ("Scaricate abi dei contratti")
 
 # file vecchio
-fi = open('trx_token_piccolo.csv','r')
+fi = open('trx_token_v2.csv','r')
 csv_reader = csv.reader(fi, delimiter=',')
 
 #lista di dict di type-counter
@@ -64,6 +64,7 @@ fi.close()
 
 fo = open ('stats_type_trx.json','w')
 json.dump(l,fo,indent=4)
+fo.close()
 
 print("--- %s seconds ---" % (time.time() - start_time))
 
