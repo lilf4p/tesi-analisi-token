@@ -4,6 +4,7 @@ from networkx.algorithms.isomorphism.ismags import partition_to_color
 from networkx.drawing.layout import random_layout
 import networkit as nk
 import pandas as pd
+import csv
  
 fname = input("NOME FILE : ")
 
@@ -11,19 +12,32 @@ fname = input("NOME FILE : ")
 #lavora con edgelist
 
 reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
+
+# Get mapping from node ids in nxG to node ids in G
+f = open(fname,'r')
+csv_reader = csv.reader(f,delimiter=',')
+next(csv_reader)
+list_node_id = []
+for row in csv_reader:
+    list_node_id.append(row[0])
+    list_node_id.append(row[1])
+#print(range(len(list_node_id)))
+idmap = dict((id, u) for (id, u) in zip(range(len(list_node_id)), list_node_id))
+
+#print (idmap)
 try:
     g = reader.read(fname)
 except: 
-    print("File non esiste!")
+    print("File not exist")
     exit()
-nk.overview(g)
 i = 0
 for u, v in g.iterEdges():
     if i > 5:
         print('...')
         break
-    print(u, v)
+    print(str(u)+'(:'+str(idmap[u])+')', str(v)+'(:'+str(idmap[v])+')')
     i += 1
+
 #FUNZIONI UTILI PER MISURE 
 
 #nk.stats.gini() -- CAPIRE CHE ARGOMENTO VUOLE 
@@ -33,14 +47,14 @@ for u, v in g.iterEdges():
 #cc.run()
 #print("number of components ", cc.numberOfComponents())
 
-#DISTRIBUZIONE GRADO NODI CON GRAFICO
-dd = sorted(nk.centrality.DegreeCentrality(g).run().scores(), reverse=True)
-plt.xscale("log")
-plt.xlabel("degree")
-plt.yscale("log")
-plt.ylabel("number of nodes")
-plt.plot(dd)
-plt.show()
+#DISTRIBUZIONE GRADO NODI CON GRAFICO#
+#dd = sorted(nk.centrality.DegreeCentrality(g).run().scores(), reverse=True)
+#plt.xscale("log")
+#plt.xlabel("degree")
+#plt.yscale("log")
+#plt.ylabel("number of nodes")
+#plt.plot(dd)
+#plt.savefig('distr_grado_4.png')
 
 #CENTRALITA'
 #abc = nk.centrality.ApproxBetweenness(g, epsilon=0.1)
