@@ -26,11 +26,11 @@ for row in csv_reader:
 idmap = dict()
 idnew = 0
 for idold in list_node_id:
-    if idold in idmap.values() : continue
+    if idold in idmap : continue
     else : 
-        idmap[idnew] = idold
+        idmap[idold] = idnew
         idnew = idnew + 1
-        
+
 #print (idmap)
 try:
     g = reader.read(fname)
@@ -42,7 +42,13 @@ for u, v in g.iterEdges():
     if i > 10:
         print('...')
         break
-    print(str(u)+'(:'+str(idmap[u])+')', str(v)+'(:'+str(idmap[v])+')')
+    for k,value in idmap.items():
+        if value == u:
+            idu = k
+        elif value == v:
+            idv = k
+
+    print(str(u)+'(:'+str(idu)+')', str(v)+'(:'+str(idv)+')')
     i += 1
 
 #FUNZIONI UTILI PER MISURE 
@@ -55,13 +61,13 @@ for u, v in g.iterEdges():
 #print("number of components ", cc.numberOfComponents())
 
 #DISTRIBUZIONE GRADO NODI CON GRAFICO#
-#dd = sorted(nk.centrality.DegreeCentrality(g).run().scores(), reverse=True)
-#plt.xscale("log")
-#plt.xlabel("degree")
-#plt.yscale("log")
-#plt.ylabel("number of nodes")
-#plt.plot(dd)
-#plt.savefig('distr_grado_4.png')
+dd = sorted(nk.centrality.DegreeCentrality(g).run().scores(), reverse=True)
+plt.xscale("log")
+plt.xlabel("degree")
+plt.yscale("log")
+plt.ylabel("number of nodes")
+plt.plot(dd)
+plt.savefig('distr_grado_1.png')
 
 #CENTRALITA'
 #abc = nk.centrality.ApproxBetweenness(g, epsilon=0.1)
