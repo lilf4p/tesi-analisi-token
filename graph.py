@@ -22,8 +22,15 @@ for row in csv_reader:
     list_node_id.append(row[0])
     list_node_id.append(row[1])
 #print(range(len(list_node_id)))
-idmap = dict((id, u) for (id, u) in zip(range(len(list_node_id)), list_node_id))
-
+#idmap = dict((id, u) for (id, u) in zip(range(len(list_node_id)), list_node_id))
+idmap = dict()
+idnew = 0
+for idold in list_node_id:
+    if idold in idmap.values() : continue
+    else : 
+        idmap[idnew] = idold
+        idnew = idnew + 1
+        
 #print (idmap)
 try:
     g = reader.read(fname)
@@ -32,7 +39,7 @@ except:
     exit()
 i = 0
 for u, v in g.iterEdges():
-    if i > 5:
+    if i > 10:
         print('...')
         break
     print(str(u)+'(:'+str(idmap[u])+')', str(v)+'(:'+str(idmap[v])+')')
