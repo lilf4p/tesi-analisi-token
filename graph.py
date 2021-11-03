@@ -1,3 +1,5 @@
+#COSTRUZIONE GRAFO CON NETWORKIT E VARIE PROVE
+
 import networkx as nx
 import matplotlib.pyplot as plt
 from networkx.algorithms.isomorphism.ismags import partition_to_color
@@ -6,43 +8,20 @@ import networkit as nk
 import pandas as pd
 import csv
  
-fname = input("NOME FILE : ")
-
 #-----------NETWORKIT--------------#
-#lavora con edgelist
 
 reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
+g = reader.read('./edgelist/edgelist_4.csv')
 
-# Get mapping from node ids in nxG to node ids in G
-f = open(fname,'r')
-csv_reader = csv.reader(f,delimiter=',')
-next(csv_reader)
-list_node_id = []
-for row in csv_reader:
-    list_node_id.append(row[0])
-    list_node_id.append(row[1])
-#print(range(len(list_node_id)))
-#idmap = dict((id, u) for (id, u) in zip(range(len(list_node_id)), list_node_id))
-idmap = dict()
-idnew = 0
-for idold in list_node_id:
-    if idold in idmap : continue
-    else : 
-        idmap[idold] = idnew
-        idnew = idnew + 1
+#----------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO--------------#
+map_nodes = reader.getNodeMap()
 
-#print (idmap)
-try:
-    g = reader.read(fname)
-except: 
-    print("File not exist")
-    exit()
 i = 0
 for u, v in g.iterEdges():
     if i > 10:
         print('...')
         break
-    for k,value in idmap.items():
+    for k,value in map_nodes.items():
         if value == u:
             idu = k
         elif value == v:
@@ -50,11 +29,50 @@ for u, v in g.iterEdges():
 
     print(str(u)+'(:'+str(idu)+')', str(v)+'(:'+str(idv)+')')
     i += 1
-
-#FUNZIONI UTILI PER MISURE 
+#-------------------------------------------------------------#
 
 nk.viztasks.drawGraph(g)
-plt.show()
+plt.savefig("./grafi/grafo_4.png")
+
+
+################IMPLEMENTATA A MANO###############
+#----------------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO-----------------#
+# Get mapping from node ids in nxG to node ids in G
+#f = open(fname,'r')
+#csv_reader = csv.reader(f,delimiter=',')
+#next(csv_reader)
+#list_node_id = []
+#for row in csv_reader:
+#    list_node_id.append(row[0])
+#    list_node_id.append(row[1])
+#print(range(len(list_node_id)))
+#idmap = dict((id, u) for (id, u) in zip(range(len(list_node_id)), list_node_id))
+#idmap = dict()
+#idnew = 0
+#for idold in list_node_id:
+#    if idold in idmap : continue
+#    else : 
+#        idmap[idold] = idnew
+#        idnew = idnew + 1
+#
+#print (idmap)
+#i = 0
+#for u, v in g.iterEdges():
+#    if i > 10:
+#        print('...')
+#        break
+#    for k,value in idmap.items():
+#        if value == u:
+#            idu = k
+#        elif value == v:
+#            idv = k
+#
+#    print(str(u)+'(:'+str(idu)+')', str(v)+'(:'+str(idv)+')')
+#    i += 1
+#----------------------------------------------------#
+###########################################
+
+#-----------FUNZIONI UTILI PER MISURE---------------# 
 
 #nk.stats.gini() -- CAPIRE CHE ARGOMENTO VUOLE 
 
@@ -63,15 +81,6 @@ plt.show()
 #cc.run()
 #print("number of components ", cc.numberOfComponents())
 
-#DISTRIBUZIONE GRADO NODI CON GRAFICO#
-dd = sorted(nk.centrality.DegreeCentrality(g).run().scores(), reverse=True)
-plt.xscale("log")
-plt.xlabel("degree")
-plt.yscale("log")
-plt.ylabel("number of nodes")
-plt.plot(dd)
-plt.savefig('distr_grado_1.png')
-
 #CENTRALITA'
 #abc = nk.centrality.ApproxBetweenness(g, epsilon=0.1)
 #abc.run()
@@ -79,11 +88,9 @@ plt.savefig('distr_grado_1.png')
 
 #----------------------------------------#
 
-
-
-
-
-
+####################################
+#          PROVE VARIE             #
+####################################
 
 #--------------PROVA NETWORKX------------#
 #f = open('./trx_contract/trx_contract_1.csv',"r")
