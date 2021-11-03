@@ -53,6 +53,9 @@ for u, v in g.iterEdges():
 
 #FUNZIONI UTILI PER MISURE 
 
+nk.viztasks.drawGraph(g)
+plt.show()
+
 #nk.stats.gini() -- CAPIRE CHE ARGOMENTO VUOLE 
 
 #COMPONENTI CONNESSE 
