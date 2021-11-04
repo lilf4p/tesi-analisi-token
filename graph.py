@@ -11,7 +11,7 @@ import csv
 #-----------NETWORKIT--------------#
 
 reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
-g = reader.read('./edgelist/edgelist_4.csv')
+g = reader.read('./edgelist/edgelist_1.csv')
 
 #----------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO--------------#
 map_nodes = reader.getNodeMap()
@@ -31,9 +31,21 @@ for u, v in g.iterEdges():
     i += 1
 #-------------------------------------------------------------#
 
-nk.viztasks.drawGraph(g)
-plt.savefig("./grafi/grafo_4.png")
+#nk.viztasks.drawGraph(g)
 
+#DIAMETRO
+diam = nk.distance.Diameter(g).getDiameter()
+a,b = diam
+#print(a,b)
+for k,value in map_nodes.items():
+    if value == a:
+        ida = k
+    if value == b:
+        idb = k 
+print(str(ida)+"->"+str(idb))  
+
+#DENSITA'
+print(nk.graphtools.density(g))
 
 ################IMPLEMENTATA A MANO###############
 #----------------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO-----------------#
@@ -75,11 +87,6 @@ plt.savefig("./grafi/grafo_4.png")
 #-----------FUNZIONI UTILI PER MISURE---------------# 
 
 #nk.stats.gini() -- CAPIRE CHE ARGOMENTO VUOLE 
-
-#COMPONENTI CONNESSE 
-#cc = nk.components.StronglyConnectedComponents(g)
-#cc.run()
-#print("number of components ", cc.numberOfComponents())
 
 #CENTRALITA'
 #abc = nk.centrality.ApproxBetweenness(g, epsilon=0.1)

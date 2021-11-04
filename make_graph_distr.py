@@ -13,6 +13,7 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
         print("File not exist")
         exit()
     dd = sorted(nk.centrality.DegreeCentrality(g).run().scores(), reverse=True)
+    #print (dd)
     plt.xscale("log")
     plt.xlabel("degree")
     plt.yscale("log")
