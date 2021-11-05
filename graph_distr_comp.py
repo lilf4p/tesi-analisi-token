@@ -4,6 +4,8 @@ import matplotlib.colors as mcolors
 import networkit as nk
 import pandas as pd
 
+cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CPCT", 9:"TRX", 10:"SHIB"}
+
 list_patch = []
 for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     fname = "./edgelist/edgelist_"+str(n)+".csv"
@@ -29,18 +31,21 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #SULLE Y VORREI (NUMERO DI COMPONENTI/COMP TOT)*100
     #NORMALIZZARE
     nc = wc.numberOfComponents()
-    list_occ_norm = [((int(occ)/nc)*100) for occ in list_occ]  
+    list_occ_norm = [((int(occ)/nc)*100) for occ in list_occ]
+    list_size_ord = sorted(list_size)
+    max_size = list_size_ord[-1]
+    list_size_norm = [((int(sz)/max_size)*100) for sz in list_size_ord]
 
     plt.xscale("log")
     plt.xlabel("size of components")
     plt.yscale("log")
     plt.ylabel("number of components")
-    plt.plot(list_size,list_occ_norm)
+    plt.plot(list_size_norm,list_occ_norm)
     #SCRIVI NOME CONTRATTO AL POSTO DEL NUMERO
-    patch = mpatches.Patch(color=color, label=str(n))
+    patch = mpatches.Patch(color=color, label=cname[n])
     list_patch.append(patch)
 
-#print(dfg)
+print(dfg)
 #print(wc.numberOfComponents())
 plt.legend(handles=list_patch)    
-plt.savefig('./risultati_analisi/distr_comp_conn_norm.png')
+plt.savefig('./risultati_analisi/distr_comp_conn_normv1.png')

@@ -20,8 +20,12 @@ for n in range(1,11):
     map_nodes = reader.getNodeMap()
     #DIAMETRO
     #PRIMA CALCOLA DISTANZE GRAFO
-    diam = nk.distance.Diameter(g).getDiameter()
+    gu = nk.graphtools.toUndirected(g)
+    diam = nk.distance.Diameter(gu).run().getDiameter()
     a,b = diam
+
+    dist = nk.distance.APSP(gu).run().getDistance(a,b)
+
     #print(a,b)
     for k,value in map_nodes.items():
         if value == a:
@@ -30,8 +34,8 @@ for n in range(1,11):
             idb = k 
 
     #DENSITA'
-    dens = nk.graphtools.density(g)
+    dens = nk.graphtools.density(gu)
 
-    csv_writer.writerow([n,str(ida)+"->"+str(idb),dens])
+    csv_writer.writerow([n,str(ida)+"->"+str(idb)+"("+str(dist)+")",dens])
     
 fo.close()
