@@ -33,19 +33,17 @@ for u, v in g.iterEdges():
 
 #nk.viztasks.drawGraph(g)
 
-#DIAMETRO
-diam = nk.distance.Diameter(g).getDiameter()
-a,b = diam
-#print(a,b)
-for k,value in map_nodes.items():
-    if value == a:
-        ida = k
-    if value == b:
-        idb = k 
-print(str(ida)+"->"+str(idb))  
+wc = nk.components.WeaklyConnectedComponents(g).run() 
+print ("Numero di componenti weakly connected del grafo "+str(n)+": "+str(wc.numberOfComponents()))
+dict_comp = wc.getComponentSizes() #Returns a map with the component indexes as keys, and their size as values
 
-#DENSITA'
-print(nk.graphtools.density(g))
+plt.xscale("log")
+plt.xlabel("size of components")
+plt.yscale("log")
+plt.ylabel("number of components")
+plt.plot(list_scores)
+plt.savefig('distr_comp_conn_1.png')
+
 
 ################IMPLEMENTATA A MANO###############
 #----------------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO-----------------#

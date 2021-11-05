@@ -19,6 +19,7 @@ for n in range(1,11):
         exit()
     map_nodes = reader.getNodeMap()
     #DIAMETRO
+    #PRIMA CALCOLA DISTANZE GRAFO
     diam = nk.distance.Diameter(g).getDiameter()
     a,b = diam
     #print(a,b)
