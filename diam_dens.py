@@ -21,6 +21,7 @@ for n in range(1,11):
     #DIAMETRO
     #PRIMA CALCOLA DISTANZE GRAFO
     gu = nk.graphtools.toUndirected(g)
+    #VIENE KILLATO QUI 
     diam = nk.distance.Diameter(gu).run().getDiameter()
     a,b = diam
 

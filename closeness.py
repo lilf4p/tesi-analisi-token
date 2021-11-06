@@ -1,3 +1,4 @@
+from matplotlib.colors import Normalize
 import networkit as nk
 import csv
 
@@ -15,7 +16,7 @@ for n in range(1,11):
 
     csv_writer.writerow(['contratto '+str(n)])
     csv_writer.writerow(['id_node','value'])
-    ac = nk.centrality.Closeness(gu,True,nk.centrality.ClosenessVariant.Generalized)
+    ac = nk.centrality.HarmonicCloseness(gu)
     ac.run()
     for id_node,v in ac.ranking()[:10]:
         for k,value in map_nodes.items():
