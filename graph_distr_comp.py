@@ -9,7 +9,7 @@ cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CP
 list_patch = []
 z=0
 #labels = []
-ndf = pd.DataFrame(columns=['contratto','1','2','3','4','other'])
+#ndf = pd.DataFrame(columns=['contratto','1','2','3','4','other'])
 for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     fname = "./edgelist/edgelist_"+str(n)+".csv"
     reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
@@ -40,21 +40,21 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     list_size_norm = [((int(sz)/max_size)*100) for sz in list_size_ord]
 
     #RECUPERA LE 10 COMPONENTI CON SIZE MAGGIORE
-    first_5comp = list_occ_norm[:4]
-    k = (len(list_size_ord) - 4)
-    other_comp = list_occ_norm[-k:]
-    print(dfg)
-    print(list_occ[:4])
+    #first_5comp = list_occ_norm[:4]
+    #k = (len(list_size_ord) - 4)
+    #other_comp = list_occ_norm[-k:]
+    #print(dfg)
+    #print(list_occ[:4])
     
-    row = [cname[n]]
-    for s in first_5comp:
-        row.append(s)
-    sum = 0
-    for s in other_comp:
-        sum = sum + s
-    row.append(sum)
-    ndf.loc[z] = row
-    z=z+1
+    #row = [cname[n]]
+    #for s in first_5comp:
+    #    row.append(s)
+    #sum = 0
+    #for s in other_comp:
+    #    sum = sum + s
+    #row.append(sum)
+    #ndf.loc[z] = row
+    #z=z+1
 
     #label=[]
     #for i in range(4):
@@ -73,17 +73,17 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 
 
 
-    #plt.xscale("log")
-    #plt.xlabel("size of components")
-    #plt.yscale("log")
-    #plt.ylabel("number of components")
-    #plt.plot(list_size_norm,list_occ_norm)
+    plt.xscale("log")
+    plt.xlabel("size of components")
+    plt.yscale("log")
+    plt.ylabel("number of components")
+    plt.plot(list_size_norm,list_occ_norm)
     #SCRIVI NOME CONTRATTO AL POSTO DEL NUMERO
-    #patch = mpatches.Patch(color=color, label=cname[n])
-    #list_patch.append(patch)
+    patch = mpatches.Patch(color=color, label=cname[n])
+    list_patch.append(patch)
 
-print(ndf)
-ax = ndf.plot(x='contratto',ylabel="% occorrenze size",kind='bar',stacked=True,mark_right=True,figsize=(12, 8), rot='horizontal')
+#print(ndf)
+#ax = ndf.plot(x='contratto',ylabel="% occorrenze size",kind='bar',stacked=True,mark_right=True,figsize=(12, 8), rot='horizontal')
 #n=0
 #for c in ax.containers:
     # Optional: if the segment is small or 0, customize the labels
@@ -94,7 +94,7 @@ ax = ndf.plot(x='contratto',ylabel="% occorrenze size",kind='bar',stacked=True,m
 #    ax.bar_label(c, fmt='%0.0f', label_type='center',fontsize=7, labels=lbl)
 #    n=n+1
 
-plt.savefig('./risultati_analisi/istog_comp_conn.png')
+plt.legend(handles=list_patch)    
+plt.savefig('./risultati_analisi/grafico_comp_conn.png')
 #print(wc.numberOfComponents())
-#plt.legend(handles=list_patch)    
 #plt.savefig('./risultati_analisi/istog_comp_conn.png')
