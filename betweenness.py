@@ -1,7 +1,7 @@
 import networkit as nk
 import csv
 
-fo = open('./risultati_analisi/cen_betweenness.csv','w')
+fo = open('./risultati_analisi/cen_betweenness1.csv','w')
 csv_writer = csv.writer(fo)
 for n in range(1,11):
     reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
@@ -18,9 +18,9 @@ for n in range(1,11):
     #APPROXIMATION OF BETWEENNESS   
     csv_writer.writerow(['contratto '+str(n)])
     csv_writer.writerow(['id_node','value'])
-    abc = nk.centrality.ApproxBetweenness(gu, epsilon=0.1)
+    abc = nk.centrality.ApproxBetweenness(gu,0.01)
     abc.run()
-    for id_node,v in abc.ranking()[:10]:
+    for id_node,v in abc.ranking()[:20]:
         for k,value in map_nodes.items():
             if value == id_node:
                 id_orig = k

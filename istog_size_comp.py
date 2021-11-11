@@ -76,17 +76,23 @@ for c in ax.containers:
             lbl[t]=''
         t=t+1
         print(lbl)
-    ax.bar_label(c, label_type='center',fontsize=7, labels=lbl, weight='bold')
+    ax.bar_label(c, label_type='center',fontsize=10, labels=lbl, weight='bold')
     n=n+1
 
+# ESTETICA DEL GRAFICO PLOTTATO
+
 plt.rcParams.update({'font.size': 22,'font.weight' : 'bold'})
-plt.xticks(fontsize=10,weight='bold')
-plt.yticks(fontsize=10,weight='bold')
-plt.ylabel('% nodes', fontsize=16,weight='bold')
-plt.xlabel('contracts',fontsize=16,weight='bold')
+plt.xticks(fontsize=12,weight='bold')
+plt.yticks(fontsize=12,weight='bold')
+plt.ylabel('% nodes', fontsize=18,weight='bold')
+plt.xlabel('contracts',fontsize=18,weight='bold')
 ax.get_legend().remove()
 
-plt.savefig('./risultati_analisi/istog_size_comp.png')
+f = plt.figure(num=1)
+f.set_figheight(15)
+f.set_figwidth(10)
+plt.savefig('./risultati_analisi/istog_size_comp1.png')
+#plt.show()
 
 #print(list_size)
 #print("KSIZES")

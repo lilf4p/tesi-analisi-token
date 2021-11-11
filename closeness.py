@@ -16,9 +16,9 @@ for n in range(1,11):
 
     csv_writer.writerow(['contratto '+str(n)])
     csv_writer.writerow(['id_node','value'])
-    ac = nk.centrality.HarmonicCloseness(gu)
+    ac = nk.centrality.TopCloseness(gu,k=20, first_heu=True, sec_heu=False)
     ac.run()
-    for id_node,v in ac.ranking()[:10]:
+    for id_node,v in zip(ac.topkNodesList(includeTrail=True),ac.topkScoresList(includeTrail=True)):
         for k,value in map_nodes.items():
             if value == id_node:
                 id_orig = k
