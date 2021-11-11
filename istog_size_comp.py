@@ -8,7 +8,7 @@ cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CP
 
 list_patch = []
 z=0
-labels = []
+labels = [[],[],[],[],[],[],[],[],[]]
 ndf = pd.DataFrame(columns=['contracts','1','2','3','4','5','6','7','8','other'])
 for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     fname = "./edgelist/edgelist_"+str(n)+".csv"
@@ -51,28 +51,40 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     ndf.loc[z] = row
     z=z+1
 
-    ksizes.append('others')
-    labels.append(ksizes[::-1])
+    print(ksizes)
+    w=0
+    for w in range(8):
+        labels[w].append(ksizes[w])
+    labels[8].append('others')
 
 print(tot_nodi)
 print(ndf)
 ax = ndf.plot(x='contracts',ylabel="% nodes",kind='bar',stacked=True,mark_right=False,rot='horizontal')
 
-n=0
-#print(labels)
+print(labels)
 #for c in ax.containers:
     
-     # customize the label to account for cases when there might not be a bar section
-#    t = 0
-#    lbl = labels[n]
-#    print(lbl)
-#    for v in c:
-#        if (w := v.get_width()) < 4: 
-#            if (lbl[t] != 'others'): lbl.pop(t)
-#    t=t+1
-    #print(lbl)
-    #ax.bar_label(c, label_type='center',fontsize=7, labels=lbl)
-#    n=n+1
+# customize the label to account for cases when there might not be a bar section
+n=0
+for c in ax.containers:
+    lbl = labels[n]
+    t = 0
+    print(lbl)
+    for v in c:
+        print(t)
+        if ((w := v.get_height()) < 2) and (lbl[t] != 'others'): 
+            lbl[t]=''
+        t=t+1
+        print(lbl)
+    ax.bar_label(c, label_type='center',fontsize=7, labels=lbl, weight='bold')
+    n=n+1
+
+plt.rcParams.update({'font.size': 22,'font.weight' : 'bold'})
+plt.xticks(fontsize=10,weight='bold')
+plt.yticks(fontsize=10,weight='bold')
+plt.ylabel('% nodes', fontsize=16,weight='bold')
+plt.xlabel('contracts',fontsize=16,weight='bold')
+ax.get_legend().remove()
 
 plt.savefig('./risultati_analisi/istog_size_comp.png')
 
