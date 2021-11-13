@@ -21,22 +21,14 @@ for n in range(1,11):
     #DIAMETRO
     #PRIMA CALCOLA DISTANZE GRAFO
     gu = nk.graphtools.toUndirected(g)
-    diam = nk.distance.Diameter(gu).run().getDiameter()
-    a,b = diam
-
-    #VIENE KILLATO QUI 
-    dist = nk.distance.APSP(gu).run().getDistance(a,b)
-
-    #print(a,b)
-    for k,value in map_nodes.items():
-        if value == a:
-            ida = k
-        if value == b:
-            idb = k 
-
+    #print(gu.isConnected())
+    diam = nk.distance.Diameter(gu,algo=1)
+    diam.run()
+    d = diam.getDiameter()
+    
     #DENSITA'
     dens = nk.graphtools.density(gu)
 
-    csv_writer.writerow([n,str(ida)+"->"+str(idb)+"("+str(dist)+")",dens])
+    csv_writer.writerow([n,d,dens])
     
 fo.close()

@@ -52,44 +52,45 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     z=z+1
 
     print(ksizes)
-    w=0
-    for w in range(8):
-        labels[w].append(ksizes[w])
-    labels[8].append('others')
+    #w=0
+    #for w in range(8):
+    #    labels[w].append(ksizes[w])
+    #labels[8].append('others')
 
 print(tot_nodi)
 print(ndf)
 ax = ndf.plot(x='contracts',ylabel="% nodes",kind='bar',stacked=True,mark_right=False,rot='horizontal')
 
-print(labels)
+#print(labels)
 #for c in ax.containers:
     
 # customize the label to account for cases when there might not be a bar section
-n=0
-for c in ax.containers:
-    lbl = labels[n]
-    t = 0
-    print(lbl)
-    for v in c:
-        print(t)
-        if ((w := v.get_height()) < 2) and (lbl[t] != 'others'): 
-            lbl[t]=''
-        t=t+1
-        print(lbl)
-    ax.bar_label(c, label_type='center',fontsize=10, labels=lbl, weight='bold')
-    n=n+1
+#n=0
+#for c in ax.containers:
+#    lbl = labels[n]
+#    t = 0
+#    print(lbl)
+#    for v in c:
+#        print(t)
+#        if ((w := v.get_height()) < 2) and (lbl[t] != 'others'): 
+#            lbl[t]=''
+#        t=t+1
+#        print(lbl)
+#    ax.bar_label(c, label_type='center',fontsize=10, labels=lbl, weight='bold')
+#    n=n+1
 
 # ESTETICA DEL GRAFICO PLOTTATO
 
-plt.rcParams.update({'font.size': 22,'font.weight' : 'bold'})
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-plt.ylabel('% nodes', fontsize=18,weight='bold')
-plt.xlabel('contracts',fontsize=18,weight='bold')
-ax.get_legend().remove()
+plt.ylabel('% NODES', fontsize=18,weight='bold')
+plt.xlabel('CONTRACTS',fontsize=18,weight='bold')
+patch = mpatches.Patch(color='tab:olive', label='others')
+list_patch.append(patch)
+plt.legend(fontsize=17,handles=list_patch)
 
 f = plt.figure(num=1)
-f.set_figheight(15)
+f.set_figheight(12)
 f.set_figwidth(10)
 plt.savefig('./risultati_analisi/istog_size_comp1.png')
 #plt.show()

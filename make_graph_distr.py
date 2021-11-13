@@ -5,6 +5,7 @@ import networkit as nk
 import matplotlib.ticker as mtick
 import pandas as pd
 import csv
+from sklearn.preprocessing import MinMaxScaler 
 
 cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CPCT", 9:"TRX", 10:"SHIB"}
 
@@ -35,25 +36,28 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     var = df['degree'].var()
     csv_writer.writerow([n,media,var])
 
+    #NORMALIZZARE - MAX
+    #nt = gu.numberOfNodes()
+    #list_occ_norm = [((int(occ)/nt)*100) for occ in list_occ]
+
+    #list_gradi_sorted = sorted(list_gradi)
+    #max_degree = list_gradi_sorted[-1]
+    ##print(max_degree)
+    #list_gradi_norm = [((int(gradi)/int(max_degree))*100) for gradi in list_gradi_sorted]
+
+    #NORMALIZZO - MINMAX
+    #print(dfg)
+    scaler = MinMaxScaler()
+    dfg_norm = pd.DataFrame(scaler.fit_transform(dfg))
+    #print(dfg_norm)
     #RECUPERO LE DUE LISTE DA PLOTTARE 
-    list_occ = dfg['counts'].tolist()
-    list_gradi = dfg['degree'].tolist()
-
-    #NORMALIZZARE
-    nt = gu.numberOfNodes()
-    list_occ_norm = [((int(occ)/nt)*100) for occ in list_occ]
-
-    list_gradi_sorted = sorted(list_gradi)
-    max_degree = list_gradi_sorted[-1]
-    #print(max_degree)
-    list_gradi_norm = [((int(gradi)/int(max_degree))*100) for gradi in list_gradi_sorted]
-
+    list_occ_norm = dfg_norm[1].tolist()
+    list_gradi_norm = dfg_norm[0].tolist()
+    print (list_occ_norm)
+    print(list_gradi_norm)
     #PLOTTO
-    plt.xscale("log")
-    plt.xlabel("degree")
-    plt.yscale("log")
-    plt.ylabel("% of nodes")
     plt.plot(list_gradi_norm,list_occ_norm)
+    
     #SCRIVI IL NOME CONTRATTO AL POSTO DEL NUMERO
     patch = mpatches.Patch(color=color, label=cname[n])
     list_patch.append(patch)
@@ -67,5 +71,14 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 #print("degree di "+str(i)+" : "+str(list_res[i]))
 
 #PLOTTO LEGENDA E SALVO FILE
-plt.legend(handles=list_patch)    
+plt.xscale("log")
+plt.yscale("log")
+plt.xticks(fontsize=12,weight='bold')
+plt.yticks(fontsize=12,weight='bold')
+plt.ylabel('% OCCURENCES', fontsize=18,weight='bold')
+plt.xlabel('% NODE DEGREE',fontsize=18,weight='bold')
+f = plt.figure(num=1)
+f.set_figheight(10)
+f.set_figwidth(10)
+plt.legend(fontsize=15,handles=list_patch)    
 plt.savefig('./risultati_analisi/distr_grado_normV1.png')
