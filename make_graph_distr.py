@@ -5,7 +5,9 @@ import networkit as nk
 import matplotlib.ticker as mtick
 import pandas as pd
 import csv
+from pandas.io.formats import style
 from sklearn.preprocessing import MinMaxScaler 
+import seaborn as sns
 
 cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CPCT", 9:"TRX", 10:"SHIB"}
 
@@ -14,6 +16,9 @@ csv_writer = csv.writer(fo)
 csv_writer.writerow(['contratto','media','varianza'])
 
 list_patch = []
+ax = None
+#bdf = pd.DataFrame(columns=['USDT','MGC','LINK','WETH','EOS','BAT','OMG','CPCT','TRX','SHIB'])
+ldf = []
 for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 
     fname = "./edgelist/edgelist_"+str(n)+".csv"
@@ -32,9 +37,9 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     dfg = df.groupby(['degree']).size().reset_index(name='counts')
 
     #media
-    media = df['degree'].mean()
-    var = df['degree'].var()
-    csv_writer.writerow([n,media,var])
+    #media = df['degree'].mean()
+    #var = df['degree'].var()
+    #csv_writer.writerow([n,media,var])
 
     #NORMALIZZARE - MAX
     #nt = gu.numberOfNodes()
@@ -46,18 +51,30 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #list_gradi_norm = [((int(gradi)/int(max_degree))*100) for gradi in list_gradi_sorted]
 
     #NORMALIZZO - MINMAX
-    #print(dfg)
+    print(dfg)
+    #dfg = dfg.iloc[1: , :]
     scaler = MinMaxScaler()
-    dfg_norm = pd.DataFrame(scaler.fit_transform(dfg))
+    dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=['degree','counts'])
+    #print(dfg_norm.dtypes)
     #print(dfg_norm)
     #RECUPERO LE DUE LISTE DA PLOTTARE 
-    list_occ_norm = dfg_norm[1].tolist()
-    list_gradi_norm = dfg_norm[0].tolist()
-    print (list_occ_norm)
-    print(list_gradi_norm)
+    #list_occ_norm = dfg_norm[1].tolist()
+    #list_gradi_norm = dfg_norm[0].tolist()
+    #print (list_occ_norm)
+    #print(list_gradi_norm)
     #PLOTTO
-    plt.plot(list_gradi_norm,list_occ_norm)
-    
+    #plt.plot(list_gradi_norm,list_occ_norm)
+    #plt.xscale("log")
+    #plt.yscale("log")
+
+    #PLOT GRAFICO NORMALIZZATO 
+    #ax = dfg_norm.plot(x='degree',y='counts',kind='line',ax=ax)
+
+    #BOXPLOT
+    #bdf[cname[n]] = df['degree']
+    #bx = dfg.boxplot()
+    ldf.append(dfg.assign(Location=cname[n]))
+
     #SCRIVI IL NOME CONTRATTO AL POSTO DEL NUMERO
     patch = mpatches.Patch(color=color, label=cname[n])
     list_patch.append(patch)
@@ -71,14 +88,17 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 #print("degree di "+str(i)+" : "+str(list_res[i]))
 
 #PLOTTO LEGENDA E SALVO FILE
-plt.xscale("log")
-plt.yscale("log")
+plt.yscale('log')
+cdf = pd.concat(ldf)
+print (cdf)
+ax = sns.boxplot(x="Location", y="degree", data=cdf)    #dfg.boxplot(column=['USDT','MGC','LINK','WETH','EOS','BAT','OMG','CPCT','TRX','SHIB'])
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-plt.ylabel('% OCCURENCES', fontsize=18,weight='bold')
-plt.xlabel('% NODE DEGREE',fontsize=18,weight='bold')
+plt.ylabel('DEGREE', fontsize=18,weight='bold')
+plt.xlabel('CONTRACTS',fontsize=18,weight='bold')
+plt.title('NODES DEGREE DISTRIBUTION',fontsize=18,weight='bold')
 f = plt.figure(num=1)
 f.set_figheight(10)
 f.set_figwidth(10)
-plt.legend(fontsize=15,handles=list_patch)    
+#plt.legend(fontsize=15,handles=list_patch)    
 plt.savefig('./risultati_analisi/distr_grado_normV1.png')

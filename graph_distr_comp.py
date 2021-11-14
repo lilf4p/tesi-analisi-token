@@ -9,6 +9,7 @@ cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CP
 
 list_patch = []
 z=0
+ax = None
 #labels = []
 #ndf = pd.DataFrame(columns=['contratto','1','2','3','4','other'])
 for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
@@ -38,26 +39,27 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 
     print(dfg)
     #NORMALIZZO MIN-MAX
+    dfg = dfg.iloc[1: , :]
     scaler = MinMaxScaler()
-    dfg_norm = pd.DataFrame(scaler.fit_transform(dfg))
+    dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=['size','counts'])
 
     print(dfg_norm)
     #RECUPERO LE DUE LISTE DA PLOTTARE 
-    list_occ_norm = dfg_norm[1].tolist()
-    list_size_norm = dfg_norm[0].tolist()
+    #list_occ_norm = dfg_norm[1].tolist()
+    #list_size_norm = dfg_norm[0].tolist()
 
     #plotto
-    plt.plot(list_size_norm,list_occ_norm)
+    ax = dfg_norm.plot(x='size',y='counts',kind='line',ax=ax)
     #SCRIVI NOME CONTRATTO AL POSTO DEL NUMERO
     patch = mpatches.Patch(color=color, label=cname[n])
     list_patch.append(patch)
 
-plt.xscale("log")
-plt.yscale("log")
+#plt.xscale("log")
+#plt.yscale("log")
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-plt.ylabel('% OCCURENCES', fontsize=18,weight='bold')
-plt.xlabel('% SIZE OF COMPONENTS',fontsize=18,weight='bold')
+plt.ylabel('OCCURENCES', fontsize=18,weight='bold')
+plt.xlabel('SIZE OF COMPONENTS',fontsize=18,weight='bold')
 plt.legend(handles=list_patch)    
 f = plt.figure(num=1)
 f.set_figheight(10)
