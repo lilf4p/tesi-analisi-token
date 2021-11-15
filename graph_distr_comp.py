@@ -49,7 +49,7 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #RECUPERO LE DUE LISTE DA PLOTTARE 
     #list_occ_norm = dfg_norm[1].tolist()
     #list_size_norm = dfg_norm[0].tolist()
-
+    
     #plotto 
     #ax = dfg_norm.plot(x='size',y='counts',kind='line',ax=ax)
     
