@@ -73,7 +73,7 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #BOXPLOT
     #bdf[cname[n]] = df['degree']
     #bx = dfg.boxplot()
-    ldf.append(dfg.assign(Location=cname[n]))
+    ldf.append(dfg_norm.assign(Location=cname[n]))
 
     #SCRIVI IL NOME CONTRATTO AL POSTO DEL NUMERO
     patch = mpatches.Patch(color=color, label=cname[n])
@@ -88,17 +88,17 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 #print("degree di "+str(i)+" : "+str(list_res[i]))
 
 #PLOTTO LEGENDA E SALVO FILE
-plt.yscale('log')
+#plt.yscale('log')
 cdf = pd.concat(ldf)
 print (cdf)
 ax = sns.boxplot(x="Location", y="degree", data=cdf)    #dfg.boxplot(column=['USDT','MGC','LINK','WETH','EOS','BAT','OMG','CPCT','TRX','SHIB'])
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-plt.ylabel('DEGREE', fontsize=18,weight='bold')
+plt.ylabel('DEGREE (normalized)', fontsize=18,weight='bold')
 plt.xlabel('CONTRACTS',fontsize=18,weight='bold')
 plt.title('NODES DEGREE DISTRIBUTION',fontsize=18,weight='bold')
 f = plt.figure(num=1)
 f.set_figheight(10)
 f.set_figwidth(10)
 #plt.legend(fontsize=15,handles=list_patch)    
-plt.savefig('./risultati_analisi/distr_grado_normV1.png')
+plt.savefig('./risultati_analisi/boxplot_distr_gradi_norm.png')
