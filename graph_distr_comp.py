@@ -5,6 +5,7 @@ import networkit as nk
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler 
 import seaborn as sns
+import numpy as np
 
 cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CPCT", 9:"TRX", 10:"SHIB"}
 
@@ -39,13 +40,21 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #max_size = list_size_ord[-1]
     #list_size_norm = [((int(sz)/max_size)*100) for sz in list_size_ord]
 
-    print(dfg)
     #NORMALIZZO MIN-MAX
     #dfg = dfg.iloc[1: , :]
-    scaler = MinMaxScaler()
-    dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=['size','counts'])
+    #scaler = MinMaxScaler()
+    #dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=['size','counts'])
+    print(dfg)
+    #NORMALIZZO CDF
+    #pdf
+    dfg['pdf'] = dfg['counts'] / sum(dfg['counts'])
+    #print(dfg)
+    #cdf
+    dfg['cdf'] = dfg['pdf'].cumsum()
+    dfg = dfg.reset_index()
+    print(dfg)
+    ax = dfg.plot(x = 'size', y = 'cdf', grid = True, ax=ax)
 
-    print(dfg_norm)
     #RECUPERO LE DUE LISTE DA PLOTTARE 
     #list_occ_norm = dfg_norm[1].tolist()
     #list_size_norm = dfg_norm[0].tolist()
@@ -54,25 +63,26 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #ax = dfg_norm.plot(x='size',y='counts',kind='line',ax=ax)
     
     #BOXPLOT
-    ldf.append(dfg.assign(Location=cname[n]))
+    #ldf.append(dfg.assign(Location=cname[n]))
     
     #SCRIVI NOME CONTRATTO AL POSTO DEL NUMERO
     patch = mpatches.Patch(color=color, label=cname[n])
     list_patch.append(patch)
 
-#plt.xscale("log")
-plt.yscale("log")
-cdf = pd.concat(ldf)
-print (cdf)
-ax = sns.boxplot(x="Location", y="size", data=cdf)
+plt.xscale("log")
+#plt.yscale("log")
+#cdf = pd.concat(ldf)
+#print (cdf)
+#ax = sns.boxplot(x="Location", y="size", data=cdf)
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-plt.ylabel('SIZE OF COMPONENTS', fontsize=18,weight='bold')
-plt.xlabel('CONTRACTS',fontsize=18,weight='bold')
-#plt.legend(handles=list_patch)    
+#plt.ylabel('FREQUENCY', fontsize=18,weight='bold')
+plt.xlabel('SIZE OF COMPONENT',fontsize=18,weight='bold')
+plt.title('COMPONENT SIZE DISTRIBUTION',fontsize=20,weight='bold')
+plt.legend(handles=list_patch,fontsize=15)    
 f = plt.figure(num=1)
 f.set_figheight(10)
 f.set_figwidth(10)
-plt.savefig('./risultati_analisi/boxplot_distr_size.png')
+plt.savefig('./risultati_analisi/cdf_size_comp.png')
 #print(wc.numberOfComponents())
 #plt.savefig('./risultati_analisi/istog_comp_conn.png')
