@@ -31,18 +31,18 @@ for u, v in g.iterEdges():
     i += 1
 #-------------------------------------------------------------#
 
-#nk.viztasks.drawGraph(g)
+nk.viztasks.drawGraph(g)
 
-wc = nk.components.WeaklyConnectedComponents(g).run() 
-print ("Numero di componenti weakly connected del grafo "+str(n)+": "+str(wc.numberOfComponents()))
-dict_comp = wc.getComponentSizes() #Returns a map with the component indexes as keys, and their size as values
+#wc = nk.components.WeaklyConnectedComponents(g).run() 
+#print ("Numero di componenti weakly connected del grafo "+str(n)+": "+str(wc.numberOfComponents()))
+#dict_comp = wc.getComponentSizes() #Returns a map with the component indexes as keys, and their size as values
 
-plt.xscale("log")
-plt.xlabel("size of components")
-plt.yscale("log")
-plt.ylabel("number of components")
-plt.plot(list_scores)
-plt.savefig('distr_comp_conn_1.png')
+#plt.xscale("log")
+#plt.xlabel("size of components")
+#plt.yscale("log")
+#plt.ylabel("number of components")
+#plt.plot(list_scores)
+#plt.savefig('distr_comp_conn_1.png')
 
 
 ################IMPLEMENTATA A MANO###############

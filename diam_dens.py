@@ -5,7 +5,7 @@
 import csv
 import networkit as nk
 
-fo = open ('./risultati_analisi/diam_dens.csv','w')
+fo = open ('./risultati_analisi/diam_dens1.csv','w')
 csv_writer = csv.writer(fo)
 csv_writer.writerow(['contratto','diam','dens'])
 
@@ -18,13 +18,23 @@ for n in range(1,11):
         print("File not exist")
         exit()
     map_nodes = reader.getNodeMap()
+
     #DIAMETRO
-    #PRIMA CALCOLA DISTANZE GRAFO
     gu = nk.graphtools.toUndirected(g)
-    #print(gu.isConnected())
-    diam = nk.distance.Diameter(gu,algo=1)
+    #print(g.numberOfNodes())
+
+    # Extract largest connect component
+    newGraph = nk.components.ConnectedComponents.extractLargestConnectedComponent(gu, True)
+    #print(newGraph.numberOfNodes())
+    
+    #FANNO LA STESSA COSA WEAKLY SU GRAFO DIRETTO E CONNECTED SU GRAFO NON DIRETTO
+    #print(nk.components.ConnectedComponents(gu).run().numberOfComponents())
+    #print(nk.components.WeaklyConnectedComponents(g).run().numberOfComponents())
+
+    diam = nk.distance.Diameter(newGraph,algo=1)
     diam.run()
-    d = diam.getDiameter()
+    d,scarta = diam.getDiameter()
+    #print(d)
     
     #DENSITA'
     dens = nk.graphtools.density(gu)

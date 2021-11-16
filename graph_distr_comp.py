@@ -4,6 +4,7 @@ import matplotlib.colors as mcolors
 import networkit as nk
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler 
+from sklearn.preprocessing import RobustScaler 
 import seaborn as sns
 import numpy as np
 
@@ -43,9 +44,16 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #NORMALIZZO MIN-MAX
     #dfg = dfg.iloc[1: , :]
     #scaler = MinMaxScaler()
-    #dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=['size','counts'])
+    #dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=['size','counts'])
+    #print(dfg)
+    
+    #NORMAILIZZO  
+    #scaler = RobustScaler()
+    #dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=dfg.columns)
+    dfg['size'] = (dfg['size'] - dfg['size'].min()) / (dfg['size'].max() - dfg['size'].min())
+
     print(dfg)
-    #NORMALIZZO CDF
+    #CALCOLO CDF
     #pdf
     dfg['pdf'] = dfg['counts'] / sum(dfg['counts'])
     #print(dfg)
@@ -53,7 +61,7 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     dfg['cdf'] = dfg['pdf'].cumsum()
     dfg = dfg.reset_index()
     print(dfg)
-    ax = dfg.plot(x = 'size', y = 'cdf', grid = True, ax=ax)
+    ax = dfg.plot(x = 'size', y = 'cdf', grid = True, ax=ax, marker='.')
 
     #RECUPERO LE DUE LISTE DA PLOTTARE 
     #list_occ_norm = dfg_norm[1].tolist()
@@ -69,20 +77,20 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     patch = mpatches.Patch(color=color, label=cname[n])
     list_patch.append(patch)
 
-plt.xscale("log")
-#plt.yscale("log")
+#plt.xscale("symlog")
+#plt.yscale("symlog")
 #cdf = pd.concat(ldf)
 #print (cdf)
 #ax = sns.boxplot(x="Location", y="size", data=cdf)
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-#plt.ylabel('FREQUENCY', fontsize=18,weight='bold')
-plt.xlabel('SIZE OF COMPONENT',fontsize=18,weight='bold')
+plt.ylabel('FREQUENCY', fontsize=18,weight='bold')
+plt.xlabel('SIZE OF COMPONENT (noramlized)',fontsize=18,weight='bold')
 plt.title('COMPONENT SIZE DISTRIBUTION',fontsize=20,weight='bold')
 plt.legend(handles=list_patch,fontsize=15)    
 f = plt.figure(num=1)
 f.set_figheight(10)
 f.set_figwidth(10)
-plt.savefig('./risultati_analisi/cdf_size_comp.png')
+plt.savefig('./risultati_analisi/cdf_size_comp_norm.png')
 #print(wc.numberOfComponents())
 #plt.savefig('./risultati_analisi/istog_comp_conn.png')

@@ -7,6 +7,7 @@ import pandas as pd
 import csv
 from pandas.io.formats import style
 from sklearn.preprocessing import MinMaxScaler 
+from sklearn.preprocessing import StandardScaler 
 import seaborn as sns
 
 cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CPCT", 9:"TRX", 10:"SHIB"}
@@ -34,7 +35,11 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
  
     #GROUPBY(VALORE) -> OCCORRENZE DI OGNI VALORE
     df = pd.DataFrame(list_res,columns=['id_node','degree'])
+    #print(df)
     dfg = df.groupby(['degree']).size().reset_index(name='counts')
+    #dfg.loc[-1] = [0, 0]  # adding a row
+    #dfg.index = dfg.index + 1  # shifting index
+    #dfg.sort_index(inplace=True) 
 
     #media
     #media = df['degree'].mean()
@@ -50,13 +55,7 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     ##print(max_degree)
     #list_gradi_norm = [((int(gradi)/int(max_degree))*100) for gradi in list_gradi_sorted]
 
-    #NORMALIZZO - MINMAX
-    print(dfg)
-    #dfg = dfg.iloc[1: , :]
-    #scaler = MinMaxScaler()
-    #dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=['degree','counts'])
-    #print(dfg_norm.dtypes)
-    #print(dfg_norm)
+    
     #RECUPERO LE DUE LISTE DA PLOTTARE 
     #list_occ_norm = dfg_norm[1].tolist()
     #list_gradi_norm = dfg_norm[0].tolist()
@@ -67,16 +66,23 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #plt.xscale("log")
     #plt.yscale("log")
 
-    #NORMALIZZO CDF
+    #NORMALIZZO
+    #scaler = MinMaxScaler()
+    #dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=['degree','counts'])
+    dfg['degree'] = (dfg['degree'] - dfg['degree'].min()) / (dfg['degree'].max() - dfg['degree'].min())
+    print(dfg)
+
+    #CDF
     #pdf
     dfg['pdf'] = dfg['counts'] / sum(dfg['counts'])
     #print(dfg)
     #cdf
     dfg['cdf'] = dfg['pdf'].cumsum()
     dfg = dfg.reset_index()
+    #dfg['degree'] = dfg['degree']+1
     print(dfg)
-    ax = dfg.plot(x = 'degree', y = 'cdf', grid = True, ax=ax)
 
+    ax = dfg.plot(x = 'degree', y = 'cdf', grid = True, ax=ax, marker='.')
 
     #PLOT GRAFICO NORMALIZZATO 
     #ax = dfg_norm.plot(x='degree',y='counts',kind='line',ax=ax)
@@ -99,17 +105,18 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 #print("degree di "+str(i)+" : "+str(list_res[i]))
 
 #PLOTTO LEGENDA E SALVO FILE
-plt.xscale('log')
+#plt.yscale('linear')
+#plt.xscale('log')
 #cdf = pd.concat(ldf)
 #print (cdf)
 #ax = sns.boxplot(x="Location", y="degree", data=cdf)    #dfg.boxplot(column=['USDT','MGC','LINK','WETH','EOS','BAT','OMG','CPCT','TRX','SHIB'])
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-#plt.ylabel('DEGREE (normalized)', fontsize=18,weight='bold')
-plt.xlabel('DEGREE',fontsize=18,weight='bold')
+plt.ylabel('FREQUENCY', fontsize=18,weight='bold')
+plt.xlabel('DEGREE (normalized)',fontsize=18,weight='bold')
 plt.title('NODES DEGREE DISTRIBUTION',fontsize=18,weight='bold')
 f = plt.figure(num=1)
 f.set_figheight(10)
 f.set_figwidth(10)
 plt.legend(fontsize=15,handles=list_patch)    
-plt.savefig('./risultati_analisi/cdf_gradi.png')
+plt.savefig('./risultati_analisi/cdf_gradi_norm.png')
