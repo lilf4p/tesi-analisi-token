@@ -1,5 +1,6 @@
 #COSTRUZIONE GRAFO CON NETWORKIT E VARIE PROVE
-
+import matplotlib
+from graph_tool.all import *
 import networkx as nx
 import matplotlib.pyplot as plt
 from networkx.algorithms.isomorphism.ismags import partition_to_color
@@ -11,7 +12,7 @@ import csv
 #-----------NETWORKIT--------------#
 
 reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
-g = reader.read('./edgelist/edgelist_1.csv')
+g = reader.read('./edgelist/edgelist_4.csv')
 
 #----------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO--------------#
 map_nodes = reader.getNodeMap()
@@ -31,7 +32,25 @@ for u, v in g.iterEdges():
     i += 1
 #-------------------------------------------------------------#
 
-nk.viztasks.drawGraph(g)
+#gu = nk.graphtools.toUndirected(g)
+#newGraph = nk.components.ConnectedComponents.extractLargestConnectedComponent(gu, True)
+#nk.viztasks.drawGraph(newGraph)
+#plt.show()
+
+
+#coreDec = nk.centrality.CoreDecomposition(gu)
+#coreDec.run()
+#print(set(coreDec.scores()))
+#nk.viztasks.drawGraph(g, node_size=[(k**2)*20 for k in coreDec.scores()])
+#plt.show()
+gx = nk.nxadapter.nk2nx(g)
+fname = open ('graph4.graphml','w')
+#nk.GraphMLIO.GraphMLWriter.write(g,fname)
+nx.write_graphml(gx,'graph4.graphml')
+
+gc = load_graph("graph4.graphml")
+pos = sfdp_layout(gc)
+graph_draw(gc,pos,output_size=(1000,1000),vcmap=matplotlib.cm.gist_heat_r,output='graph.pdf')
 
 #wc = nk.components.WeaklyConnectedComponents(g).run() 
 #print ("Numero di componenti weakly connected del grafo "+str(n)+": "+str(wc.numberOfComponents()))

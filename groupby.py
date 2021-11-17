@@ -68,6 +68,7 @@ for row in csv_reader:
             c = "1" #type
         elif "transferFrom" in type_trx:
             c = "2"
+        #LISTA DI TYPE INVECE DI UNO SOLO     
         list_arg = [value,value,value,value,time,time,1,c] #lista di [vmin,vmax,vmedia,vsomma,mintime,maxtime,count_trx,type]
         d[key] = list_arg
     else: #trx gia' presente 
