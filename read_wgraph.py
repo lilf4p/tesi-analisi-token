@@ -9,7 +9,7 @@ print(G)
 print(G.list_properties())
 
 vprop = G.vp['name']
-eprop = G.ep['time_last']
+eprop = G.ep['val_sum']
 
 n=0
 for e in G.edges():
@@ -20,7 +20,8 @@ for e in G.edges():
 
 
 
-#pos = sfdp_layout(G)
+pos = sfdp_layout(G)
 #deg = G.degree_property_map("total")
 
-#graph_draw(G,pos=pos,vertex_size=deg,vertex_fill_color=deg,vorder=deg)
+graph_draw(G,pos=pos,eprops=eprop)
+plt.show()
