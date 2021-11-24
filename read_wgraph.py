@@ -2,6 +2,8 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from graph_tool.all import *
+import numpy as np 
+
 
 G = load_graph_from_csv('./trx_contract/trx_contract_1.csv',directed=True,skip_first=True)
 
@@ -18,10 +20,6 @@ for e in G.edges():
     print(str(v)+'('+str(vprop[v])+'),'+str(u)+'('+str(vprop[u])+'),'+str(eprop[e]))
     n+=1
 
-
-
-pos = sfdp_layout(G)
 #deg = G.degree_property_map("total")
 
-graph_draw(G,pos=pos,eprops=eprop)
-plt.show()
+
