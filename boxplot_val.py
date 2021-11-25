@@ -7,6 +7,7 @@ from operator import itemgetter
 import numpy as np
 from decimal import Decimal
 from sklearn.preprocessing import MinMaxScaler 
+import seaborn as sns
 
 
 cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CPCT", 9:"TRX", 10:"SHIB"}
@@ -14,8 +15,8 @@ cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CP
 weights = ['val_avg','val_min','val_max','val_sum'] #CAMBIA PER CALCOLARE LA DISTRIBUZIONE DI WEIGHT DIVERSI  
 
 for weight in weights:
-    list_patch = []
     ax = None
+    ldf=[]
     for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
         fname = './trx_contract/trx_contract_'+str(n)+'.csv'
 
@@ -32,18 +33,18 @@ for weight in weights:
         print(dfg.dtypes)
         
         #NORMALIZZO MINMAX LA MISURA WEIGHT
-        #scaler = MinMaxScaler()
-        #dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=[weight,'counts'])
-        dfg[weight] = (dfg[weight] - dfg[weight].min()) / (dfg[weight].max() - dfg[weight].min())
-        print(dfg)
+        scaler = MinMaxScaler()
+        dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=[weight,'counts'])
+        #dfg[weight] = (dfg[weight] - dfg[weight].min()) / (dfg[weight].max() - dfg[weight].min())
+        print(dfg_norm)
 
         #CALCOLO LE FREQUENZE NORMALIZZATE CON CDF
         #pdf
-        dfg['pdf'] = dfg['counts'] / sum(dfg['counts'])
+        #dfg['pdf'] = dfg['counts'] / sum(dfg['counts'])
         #cdf
-        dfg['cdf'] = dfg['pdf'].cumsum()
-        dfg = dfg.reset_index()
-        print(dfg)
+        #dfg['cdf'] = dfg['pdf'].cumsum()
+        #dfg = dfg.reset_index()
+        #print(dfg)
 
         #NORMALIZZA OCCORRENZE
         #nv = len(df.index)
@@ -55,20 +56,23 @@ for weight in weights:
         #print(dfg)
 
         #PLOTTO IL DATAFRAME ELABORATO
-        ax = dfg.plot (x=weight,y='cdf',ax=ax)
+        #ax = dfg.plot (x=weight,y='cdf',ax=ax)
 
-        patch = mpatches.Patch(color=color, label=cname[n])
-        list_patch.append(patch)
+        #BOXPLOT
+        ldf.append(dfg.assign(Location=cname[n]))
+
 
     #plt.xscale('log')
     plt.yscale('log')
+    cdf = pd.concat(ldf)
+    print (cdf)
+    ax = sns.boxplot(x="Location", y=weight, data=cdf)
     f = plt.figure(num=1)
     f.set_figheight(10)
     f.set_figwidth(10)
     plt.xticks(fontsize=12,weight='bold')
     plt.yticks(fontsize=12,weight='bold')
-    plt.ylabel('FREQUENCY', fontsize=18,weight='bold')
-    plt.legend(fontsize=15,handles=list_patch)    
+    #plt.legend(fontsize=15,handles=list_patch)    
 
     #CAMBIA IN BASE A WEIGHT
     if weight == 'val_avg':
@@ -80,7 +84,8 @@ for weight in weights:
     elif weights == 'val_sum':
         s = 'SUM'
     
-    plt.xlabel(s+' TOKEN TRANSFER (normalized)',fontsize=18,weight='bold') 
+    plt.ylabel(s+' TOKEN TRANSFER', fontsize=18,weight='bold')
+    plt.xlabel('CONTRACTS',fontsize=18,weight='bold') 
     plt.title(s+' TOKEN TRANSFER DISTRUBUTION',fontsize=18,weight='bold')
-    plt.savefig('./risultati_analisi/distr_'+weight+'.png')
+    plt.savefig('./risultati_analisi/boxplot_'+weight+'.png')
 
