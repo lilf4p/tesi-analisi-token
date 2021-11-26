@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('agg')
 from numpy import longlong
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -17,7 +19,7 @@ for weight in weights:
     list_patch = []
     ax = None
     for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
-        fname = './trx_contract/trx_contract_'+str(n)+'.csv'
+        fname = './trx_contract/trx_contract_riprova_'+str(n)+'.csv'
 
         #CREO DATAFRAME E CONVERTO IN NUMERI RAPPRESENTABILI
         df = pd.read_csv(fname)
@@ -34,8 +36,8 @@ for weight in weights:
         #NORMALIZZO MINMAX LA MISURA WEIGHT
         #scaler = MinMaxScaler()
         #dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=[weight,'counts'])
-        dfg[weight] = (dfg[weight] - dfg[weight].min()) / (dfg[weight].max() - dfg[weight].min())
-        print(dfg)
+        #dfg[weight] = (dfg[weight] - dfg[weight].min()) / (dfg[weight].max() - dfg[weight].min())
+        #print(dfg)
 
         #CALCOLO LE FREQUENZE NORMALIZZATE CON CDF
         #pdf
@@ -49,6 +51,7 @@ for weight in weights:
         #nv = len(df.index)
         #dfg['counts'] = [((occ/nv)*100) for occ in dfg['counts']]
         #print(dfg)
+        #print('nv='+str(nv))
 
         #TRASLO LE MISURE SULL'ASSE X DI UNO A DESTRA PER POTER RAPPRESENTARE LO 0 IN LOGSCALE (0 -> 1)
         #dfg[weight] = dfg[weight] + np.float64('%E' % Decimal('1'))
@@ -60,8 +63,10 @@ for weight in weights:
         patch = mpatches.Patch(color=color, label=cname[n])
         list_patch.append(patch)
 
-    #plt.xscale('log')
+    plt.xscale('log')
     plt.yscale('log')
+    #plt.ylim(0.8,1)
+    #plt.xlim(0,0.1)
     f = plt.figure(num=1)
     f.set_figheight(10)
     f.set_figwidth(10)
@@ -82,5 +87,5 @@ for weight in weights:
     
     plt.xlabel(s+' TOKEN TRANSFER (normalized)',fontsize=18,weight='bold') 
     plt.title(s+' TOKEN TRANSFER DISTRUBUTION',fontsize=18,weight='bold')
-    plt.savefig('./risultati_analisi/distr_'+weight+'.png')
+    plt.savefig('./risultati_analisi/cdf_val/cdf_'+weight+'.png')
 

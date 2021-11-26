@@ -69,8 +69,8 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #NORMALIZZO
     #scaler = MinMaxScaler()
     #dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=['degree','counts'])
-    dfg['degree'] = (dfg['degree'] - dfg['degree'].min()) / (dfg['degree'].max() - dfg['degree'].min())
-    print(dfg)
+    #dfg['degree'] = (dfg['degree'] - dfg['degree'].min()) / (dfg['degree'].max() - dfg['degree'].min())
+    #print(dfg)
 
     #CDF
     #pdf
@@ -82,7 +82,7 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #dfg['degree'] = dfg['degree']+1
     print(dfg)
 
-    ax = dfg.plot(x = 'degree', y = 'cdf', grid = True, ax=ax, marker='.')
+    ax = dfg.plot(x = 'degree', y = 'cdf',ax=ax)
 
     #PLOT GRAFICO NORMALIZZATO 
     #ax = dfg_norm.plot(x='degree',y='counts',kind='line',ax=ax)
@@ -105,8 +105,8 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
 #print("degree di "+str(i)+" : "+str(list_res[i]))
 
 #PLOTTO LEGENDA E SALVO FILE
-#plt.yscale('linear')
-#plt.xscale('log')
+#plt.yscale('log')
+plt.xscale('log')
 #cdf = pd.concat(ldf)
 #print (cdf)
 #ax = sns.boxplot(x="Location", y="degree", data=cdf)    #dfg.boxplot(column=['USDT','MGC','LINK','WETH','EOS','BAT','OMG','CPCT','TRX','SHIB'])

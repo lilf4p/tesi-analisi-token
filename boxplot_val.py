@@ -33,10 +33,10 @@ for weight in weights:
         print(dfg.dtypes)
         
         #NORMALIZZO MINMAX LA MISURA WEIGHT
-        scaler = MinMaxScaler()
-        dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=[weight,'counts'])
+        #scaler = MinMaxScaler()
+        #dfg_norm = pd.DataFrame(scaler.fit_transform(dfg),columns=[weight,'counts'])
         #dfg[weight] = (dfg[weight] - dfg[weight].min()) / (dfg[weight].max() - dfg[weight].min())
-        print(dfg_norm)
+        #print(dfg_norm)
 
         #CALCOLO LE FREQUENZE NORMALIZZATE CON CDF
         #pdf
@@ -87,5 +87,5 @@ for weight in weights:
     plt.ylabel(s+' TOKEN TRANSFER', fontsize=18,weight='bold')
     plt.xlabel('CONTRACTS',fontsize=18,weight='bold') 
     plt.title(s+' TOKEN TRANSFER DISTRUBUTION',fontsize=18,weight='bold')
-    plt.savefig('./risultati_analisi/boxplot_'+weight+'.png')
+    plt.savefig('./risultati_analisi/boxplot_val/boxplot_'+weight+'.png')
 
