@@ -35,18 +35,18 @@ for weight in weights:
         print(dfg.dtypes)
 
         #NORMALIZZO MINMAX LA MISURA WEIGHT
-        #scaler = MinMaxScaler()
-        #dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=[weight,'counts'])
-        dfg[weight] = (dfg[weight] - dfg[weight].min()) / (dfg[weight].max() - dfg[weight].min())
-        print(dfg)
+        scaler = MinMaxScaler()
+        dfg = pd.DataFrame(scaler.fit_transform(dfg),columns=[weight,'counts'])
+        #dfg[weight] = (dfg[weight] - dfg[weight].min()) / (dfg[weight].max() - dfg[weight].min())
+        #print(dfg)
 
         #CALCOLO LE FREQUENZE NORMALIZZATE CON CDF
         #pdf
-        dfg['pdf'] = dfg['counts'] / sum(dfg['counts'])
+        #dfg['pdf'] = dfg['counts'] / sum(dfg['counts'])
         #cdf
-        dfg['cdf'] = dfg['pdf'].cumsum()
-        dfg = dfg.reset_index()
-        print(dfg)
+        #dfg['cdf'] = dfg['pdf'].cumsum()
+        #dfg = dfg.reset_index()
+        #print(dfg)
 
         #NORMALIZZA OCCORRENZE
         #nv = len(df.index)
@@ -59,7 +59,7 @@ for weight in weights:
         #print(dfg)
 
         #PLOTTO IL DATAFRAME ELABORATO
-        plt.plot (dfg[weight],dfg['cdf'])
+        plt.plot (dfg[weight],dfg['counts'])
 
         patch = mpatches.Patch(color=color, label=cname[n])
         list_patch.append(patch)
@@ -88,6 +88,6 @@ for weight in weights:
     
     plt.xlabel(s+' TOKEN TRANSFER',fontsize=18,weight='bold') 
     plt.title(s+' TOKEN TRANSFER DISTRUBUTION',fontsize=18,weight='bold')
-    plt.savefig('./risultati_analisi/cdf_val_norm/cdf_norm_'+weight+'.png')
+    plt.savefig('./risultati_analisi/distr_val_norm/distr_norm_'+weight+'.png')
     plt.clf()
 
