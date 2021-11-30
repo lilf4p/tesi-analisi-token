@@ -52,10 +52,10 @@ for n in range (1,11):
     #COMP CONN MAGGIORE 
     newGraph = nk.components.ConnectedComponents.extractLargestConnectedComponent(gu, True)
 
-    gx = nk.nxadapter.nk2nx(newGraph)
-    fname = open ('./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml','w')
+    #gx = nk.nxadapter.nk2nx(newGraph)
+    #fname = open ('./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml','w')
     #nk.GraphMLIO.GraphMLWriter.write(g,fname)
-    nx.write_graphml(gx,'./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml')
+    nk.writeGraph(newGraph,'./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml',nk.Format.GraphML)
 
     gc = load_graph('./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml')
     pos = sfdp_layout(gc)
