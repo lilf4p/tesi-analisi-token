@@ -1,6 +1,6 @@
 import matplotlib
-from seaborn.rcmod import plotting_context
 matplotlib.use('agg')
+from seaborn.rcmod import plotting_context
 from numpy import float64, int64, longlong
 import pandas as pd
 import matplotlib.pyplot as plt

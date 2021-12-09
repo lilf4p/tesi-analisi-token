@@ -51,9 +51,10 @@ for color,n in zip(mcolors.TABLEAU_COLORS,range(1,11)):
     #PLOTTO IL DATAFRAME ELABORATO
     #ax = dfg.plot (x=weight,y='cdf',ax=ax)
     #BOXPLOT
-    ldf.append(dfg.assign(Location=cname[n]))
+    ldf.append(dfg_norm.assign(Location=cname[n]))
 #plt.xscale('log')
-plt.yscale('log')
+#plt.yscale('log')
+plt.ylim(top=0.001)
 cdf = pd.concat(ldf)
 print (cdf)
 f = plt.figure(num=1)
@@ -73,7 +74,7 @@ elif weight == 'val_max':
 elif weight == 'val_sum':
     s = 'SUM'
 
-plt.ylabel(s+' TOKEN TRANSFER', fontsize=18,weight='bold')
+plt.ylabel(s+' TOKEN TRANSFER (zoom)', fontsize=18,weight='bold')
 plt.xlabel('CONTRACTS',fontsize=18,weight='bold') 
 plt.title(s+' TOKEN TRANSFER DISTRUBUTION',fontsize=18,weight='bold')
-plt.savefig('./risultati_analisi/boxplot_val/boxplot_'+weight+'.png')
+plt.savefig('./risultati_analisi/boxplot_val_zoom/boxplot_'+weight+'_zoom.png')

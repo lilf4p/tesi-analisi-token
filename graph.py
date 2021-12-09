@@ -10,56 +10,46 @@ import networkit as nk
 import pandas as pd
 import csv
 
-
+n=3
 #-----------NETWORKIT--------------#
-for n in range (1,11):
-    reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
-    g = reader.read('./edgelist/edgelist_'+str(n)+'.csv')
-
-    #----------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO--------------#
-    map_nodes = reader.getNodeMap()
-
-    i = 0
-    for u, v in g.iterEdges():
-        if i > 10:
-            print('...')
-            break
-        for k,value in map_nodes.items():
-            if value == u:
-                idu = k
-            elif value == v:
-                idv = k
-
-        print(str(u)+'(:'+str(idu)+')', str(v)+'(:'+str(idv)+')')
-        i += 1
-    #-------------------------------------------------------------#
-
-    gu = nk.graphtools.toUndirected(g)
-    #newGraph = nk.components.ConnectedComponents.extractLargestConnectedComponent(gu, True)
-    #nk.viztasks.drawGraph(newGraph)
-    #plt.show()
-
-    #CALCOLA DEGREE
-    #dd = nk.centrality.DegreeCentrality(gu).run()
-    #list_res = dd.ranking()
-
-    #coreDec = nk.centrality.CoreDecomposition(gu)
-    #coreDec.run()
-    #print(set(coreDec.scores()))
-    #nk.viztasks.drawGraph(g, node_size=[(k**2)*20 for k in coreDec.scores()])
-    #plt.show()    
-
-    #COMP CONN MAGGIORE 
-    newGraph = nk.components.ConnectedComponents.extractLargestConnectedComponent(gu, True)
-
-    #gx = nk.nxadapter.nk2nx(newGraph)
-    #fname = open ('./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml','w')
-    #nk.GraphMLIO.GraphMLWriter.write(g,fname)
-    nk.writeGraph(newGraph,'./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml',nk.Format.GraphML)
-
-    gc = load_graph('./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml')
-    pos = sfdp_layout(gc)
-    graph_draw(gc,pos,output_size=(1000,1000),output='./risultati_analisi/grafi_conn/graph_'+str(n)+'_conn.pdf')
+reader = nk.graphio.EdgeListReader(',',1,'#',directed=True,continuous=False)
+g = reader.read('./edgelist/edgelist_'+str(n)+'.csv')
+#----------MAP DEI NODI ESEGUITO DA NETWORKIT QUANDO CREA UN GRAFO--------------#
+map_nodes = reader.getNodeMap()
+i = 0
+for u, v in g.iterEdges():
+    if i > 10:
+        print('...')
+        break
+    for k,value in map_nodes.items():
+        if value == u:
+            idu = k
+        elif value == v:
+            idv = k
+    print(str(u)+'(:'+str(idu)+')', str(v)+'(:'+str(idv)+')')
+    i += 1
+#-------------------------------------------------------------#
+gu = nk.graphtools.toUndirected(g)
+#newGraph = nk.components.ConnectedComponents.extractLargestConnectedComponent(gu, True)
+#nk.viztasks.drawGraph(newGraph)
+#plt.show()
+#CALCOLA DEGREE
+#dd = nk.centrality.DegreeCentrality(gu).run()
+#list_res = dd.ranking()
+#coreDec = nk.centrality.CoreDecomposition(gu)
+#coreDec.run()
+#print(set(coreDec.scores()))
+#nk.viztasks.drawGraph(g, node_size=[(k**2)*20 for k in coreDec.scores()])
+#plt.show()    
+#COMP CONN MAGGIORE 
+newGraph = nk.components.ConnectedComponents.extractLargestConnectedComponent(gu, True)
+#gx = nk.nxadapter.nk2nx(newGraph)
+#fname = open ('./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml','w')
+#nk.GraphMLIO.GraphMLWriter.write(g,fname)
+nk.writeGraph(newGraph,'./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml',nk.Format.GraphML)
+gc = load_graph('./risultati_analisi/grafi_conn/graph'+str(n)+'_conn.graphml')
+pos = sfdp_layout(gc)
+graph_draw(gc,pos,output_size=(1000,1000),output='./risultati_analisi/grafi_conn/graph_'+str(n)+'_conn.pdf')
 
 #wc = nk.components.WeaklyConnectedComponents(g).run() 
 #print ("Numero di componenti weakly connected del grafo "+str(n)+": "+str(wc.numberOfComponents()))
