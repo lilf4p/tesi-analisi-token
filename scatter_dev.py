@@ -7,10 +7,12 @@ import pandas as pd
 from decimal import Decimal
 import networkit as nk
 
+cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CPCT", 9:"TRX", 10:"SHIB"}
+
 n = '1'
 weight = 'val_sum'
 
-fname = './trx_contract/trx_contract_'+str(n)+'.csv'
+fname = './trx_contract/trx_contract_riprova_'+str(n)+'.csv'
 edgelist = "./edgelist/edgelist_"+str(n)+".csv"
 
 #CALCOLA TOKEN RICEVUTI PER OGNI NODO 
@@ -74,19 +76,19 @@ print(list_dev)
 print(list_mean)
 print(list_len)
 #PLOTTA SCATTER PLOT
-plt.yscale('linear')
+plt.yscale('log')
 plt.xscale('log')
 f = plt.figure(num=1)
 f.set_figheight(9)
 f.set_figwidth(12)
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-plt.ylabel('EARNED TOKEN', fontsize=18,weight='bold')
-plt.xlabel('NODE DEGREE',fontsize=18,weight='bold')
-plt.errorbar(dflist['degree'],list_mean,yerr=list_dev,fmt='none',lw=1,capsize=3)
-scat = plt.scatter(dflist['degree'],list_mean,c=list_len)
+plt.ylabel('EARNED TOKEN', fontsize=16,weight='bold')
+plt.xlabel('NODE DEGREE',fontsize=16,weight='bold')
+#plt.errorbar(dflist['degree'],list_mean,yerr=list_dev,fmt='none',lw=1,capsize=3)
+scat = plt.scatter(dflist['degree'],list_mean,c=list_dev,s=list_len,alpha=0.3)
 cb = f.colorbar(scat)
-cb.set_label("Number of node", size='xx-large',weight='bold')
+cb.set_label("STANDARD DEVIATION", size='x-large',weight='bold')
 cb.ax.tick_params(labelsize=12)
-plt.title('RELATION BETWEEN NODE DEGREE AND EARNED TOKEN',fontsize=20,weight='bold')
-plt.savefig('./risultati_analisi/scatter_var/scatter'+n+'_var.svg',format='svg')
+plt.title(cname[int(n)]+'\n RELATION BETWEEN NODE DEGREE AND EARNED TOKEN',fontsize=18,weight='bold')
+plt.savefig('./risultati_analisi/scatter_var/scatter'+n+'_var.png',format='png')
