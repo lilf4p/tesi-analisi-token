@@ -1,4 +1,4 @@
-#GRAFICO CON MEDIA E VARIANZA
+#GRAFICO CON MEDIA E VARIANZA - PALLINI/VALORI SULLE X AGGREGATI
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
@@ -11,6 +11,7 @@ cname = {1:"USDT", 2:"MGC", 3:"LINK", 4:"WETH", 5:"EOS", 6:"BAT", 7:"OMG", 8:"CP
 
 n = '1'
 weight = 'val_sum'
+#weight = 'val_avg' #CAMBIA PER AVG O SUM
 
 fname = './trx_contract/trx_contract_riprova_'+str(n)+'.csv'
 edgelist = "./edgelist/edgelist_"+str(n)+".csv"
@@ -21,7 +22,8 @@ df[weight] = ['%E' % Decimal(v) for v in df[weight]]
 df[weight]=df[weight].astype('float64')
 print(df)
 print(df.dtypes)
-dfg = df.groupby(['to_address'])[weight].sum().reset_index(name='in_token')
+#dfg = df.groupby(['to_address'])[weight].sum().reset_index(name='in_token')
+dfg = df.groupby(['from_address'])[weight].sum().reset_index(name='out_token') #CAMBIA PER AVG O SUM E INTOKEN O OUTUOKEN
 print(dfg)
 print(dfg.dtypes)
 
@@ -41,28 +43,28 @@ dict_token = dict()
 for u in list_nodes:
     dict_token[u] = 0
 
-token = dict (zip(dfg['to_address'],dfg['in_token']))
+token = dict (zip(dfg['from_address'],dfg['out_token']))
 for k,v in token.items():
     dict_token[k] = dict_token[k] + v
 #print(dict_token)
-dfg_tot = pd.DataFrame(list(dict_token.items()),columns=['id','in_token'])
+dfg_tot = pd.DataFrame(list(dict_token.items()),columns=['id','out_token'])
 id_nodi,gradi = zip(*list_res)
 dfg_tot['degree'] = gradi
 print (dfg_tot)
 
 #ELIMINA NODI CON 0 TOKEN GUADAGNATI
-dfg_tot = dfg_tot[dfg_tot.in_token != 0].reset_index()
+dfg_tot = dfg_tot[dfg_tot.out_token != 0].reset_index()
 print(dfg_tot)
 
 #GROUPBY DEGREE -> OTTIENI GLI ARRAY TOKEN_i
-dflist = dfg_tot.groupby('degree')['in_token'].apply(list).reset_index(name='in_token_list')
+dflist = dfg_tot.groupby('degree')['out_token'].apply(list).reset_index(name='out_token_list')
 print(dflist)
 
 #PER OGNI IN_TOKEN_LIST CALCOLA MEDIA E DEVIAZIONE STD
 list_mean = []
 list_dev = []
 list_len = []
-lt = dflist['in_token_list'].tolist()
+lt = dflist['out_token_list'].tolist()
 print('numero liste :'+str(len(lt)))
 for l in lt:
     list_len.append(len(l)) #LUNGHEZZE ARRAY TOKEN
@@ -83,12 +85,12 @@ f.set_figheight(9)
 f.set_figwidth(12)
 plt.xticks(fontsize=12,weight='bold')
 plt.yticks(fontsize=12,weight='bold')
-plt.ylabel('EARNED TOKEN', fontsize=16,weight='bold')
+plt.ylabel('AVERAGE SPENT TOKEN', fontsize=16,weight='bold')
 plt.xlabel('NODE DEGREE',fontsize=16,weight='bold')
 #plt.errorbar(dflist['degree'],list_mean,yerr=list_dev,fmt='none',lw=1,capsize=3)
-scat = plt.scatter(dflist['degree'],list_mean,c=list_dev,s=list_len,alpha=0.3)
+scat = plt.scatter(dflist['degree'],list_mean,c=list_dev,alpha=0.5)
 cb = f.colorbar(scat)
 cb.set_label("STANDARD DEVIATION", size='x-large',weight='bold')
 cb.ax.tick_params(labelsize=12)
-plt.title(cname[int(n)]+'\n RELATION BETWEEN NODE DEGREE AND EARNED TOKEN',fontsize=18,weight='bold')
-plt.savefig('./risultati_analisi/scatter_var/scatter'+n+'_var.png',format='png')
+plt.title(cname[int(n)]+'\n RELATION BETWEEN NODE DEGREE AND SPENT TOKEN',fontsize=18,weight='bold')
+plt.savefig('./risultati_analisi/scatter_outoken/avg/scatter_dev/scatter'+n+'_dev.png',format='png')
